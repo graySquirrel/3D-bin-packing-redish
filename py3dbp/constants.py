@@ -11,9 +11,12 @@ class RotationType:
     Notupdown = [RT_WHD,RT_HWD]
  
 class Axis:
-    WIDTH = 0
-    HEIGHT = 1
-    DEPTH = 2
+    # WIDTH = 0
+    # HEIGHT = 1
+    # DEPTH = 2
+    WIDTH = 1
+    HEIGHT = 2
+    DEPTH = 0
 
     ALL = [WIDTH, HEIGHT, DEPTH]
 
