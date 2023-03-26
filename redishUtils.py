@@ -27,6 +27,7 @@ def addTotes(p, x, n, l):
         )
 
 def packAndPrintResults(p):
+    theReturnString = ""
     # calculate packing
     p.pack(
         bigger_first=True,
@@ -61,7 +62,9 @@ def packAndPrintResults(p):
     unfittedItems = {}
     if (len(box.unfitted_items) > 0):
         notfitnum=len(box.unfitted_items)
-        print(str(notfitnum) + " Items dont fit:")
+        tmpstr = str(notfitnum) + " Items dont fit:"
+        print(tmpstr)
+        theReturnString += tmpstr
         for item in box.unfitted_items:
             if item.name not in unfittedItems:
                 unfittedItems[item.name] = 0
@@ -77,11 +80,19 @@ def packAndPrintResults(p):
             # print("***************************************************")
     #print("***************************************************")
         for key in unfittedItems:
-            print(key, unfittedItems[key])
+            tmpstr = str(key) + " " + str(unfittedItems[key]) + "\n"
+            print(tmpstr)
+            theReturnString += tmpstr
     else:
-        print("all totes fit!!")
-    print('space utilization : {}%'.format(round(volume_t / float(volume) * 100, 2)))
-    print('residual volume : ', float(volume) - volume_t)
+        tmpstr = "all totes fit!!"
+        print(tmpstr)
+        theReturnString += tmpstr
+    tmpstr = "space utilization : %s" % format(round(volume_t / float(volume) * 100, 2))
+    print(tmpstr)
+    theReturnString += tmpstr
+    tmpstr = f'residual volume : %f' % (float(volume) - volume_t)
+    print(tmpstr)
+    theReturnString += tmpstr
     #print('unpack item : ', unfitted_name)
 
     #print('unpack item volume : ', volume_f)
@@ -90,4 +101,5 @@ def packAndPrintResults(p):
     stop = time.time()
     #print('used time : ', stop - start)
     print("***************************************************")
-    return(Painter(box))
+    theReturnString += "*********"
+    return(Painter(box), theReturnString)

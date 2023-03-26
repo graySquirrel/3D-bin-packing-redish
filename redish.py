@@ -19,6 +19,10 @@ eightOz = [(13, 8.9, 8.8), 'eightOz', 'green']
 eightBy8 = [(23, 12, 19), 'eightBy8', 'green']
 aPalletOfStuff = [(40, 40, 40), 'aPallet', 'orange']
 Tower = [(40, 28, 70), 'Tower', 'blue']
+
+choices = list([sixBy9,Round,Cup,nineBy9,fiveInch,eightOz,eightBy8,aPalletOfStuff,Tower])
+choices_names = list(map(lambda x: (x[1]), choices))
+
 # Uhaul 20' truck dims are 7' 3" wide, 6' 5" high, 16' 10" deep
 # But we are considering that stuff only goes 5' high
 # and only half of the width 3' 7" is available for totes, since towers go on other side
@@ -39,9 +43,9 @@ re.addTotes(packer, Tower, 2, 2) # MOMA towers
 re.addTotes(packer, Round, 30, 3) # L'Oreal, yellow
 
 re.addTotes(packer, fiveInch, 20, 3) # The Hub - NJ, red
-re.addTotes(packer, eightBy8, 15, 4) # JPM, green
+re.addTotes(packer, eightBy8, 20, 4) # JPM, green
 
-painter = re.packAndPrintResults(packer)
+painter, retstr = re.packAndPrintResults(packer)
 painter.plotBoxAndItems()
 
 
