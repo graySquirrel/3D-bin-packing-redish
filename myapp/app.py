@@ -62,8 +62,7 @@ app_ui = ui.page_fluid(
             #ui.p(ui.input_action_button("calculate", "Recalculate Fit")),
             ui.output_plot("plot"),
             ui.output_text_verbatim("outtxt"),
-            ui.output_text_verbatim("compute"),
-
+            #ui.output_text_verbatim("compute"),
         ),
     ),
 )
@@ -130,7 +129,7 @@ def server(input, output, session):
     # TODO Make this work.
     @output
     @render.text
-    @reactive.event(input.plot)
+    @reactive.event(input.addItemToStop)
     async def compute():
         with ui.Progress(min=1, max=15) as p:
             p.set(message="Calculation in progress", detail="This may take a while...")
