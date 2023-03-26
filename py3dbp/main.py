@@ -619,7 +619,7 @@ class Painter:
         # plot bin 
         self._plotCube(axGlob,0, 0, 0, float(self.width), float(self.height), float(self.depth),color='black',mode=1)
 
-        plt.title('result')
+        #plt.title('result')
         self.setAxesEqual(axGlob)
         #fig, ax = plt.subplots()
         #return fig
