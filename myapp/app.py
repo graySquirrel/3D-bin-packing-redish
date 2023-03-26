@@ -22,6 +22,10 @@ import matplotlib.pyplot as plt
 from shiny import App, reactive, render, ui
 from asyncio import sleep
 
+# TODO: Export Config, Import Config
+# TODO: remove item from packing list table
+# TODO: epose Truck selection?
+
 # Hardcode trucks for starters.
 TwentyFootTruckHalf = [(41, 202, 60), 'TwentyFootTruckHalf']
 TwentyFootTowerTruckHalf = [(41, 202, 71), 'TwentyFootTruckHalf']
@@ -45,6 +49,29 @@ choices_names = list(map(lambda x: (x[4]), dfItemDefnList))
 
 result_string = ""
 
+# app_ui = ui.page_fluid(
+#     ui.row(
+#     ui.column(3, 
+#         ui.panel_title("Edit Items"),
+#         ui.input_numeric("stopnum", "Stop", value=1, min=1, max=20),
+#         ui.input_text("Customer","Customer Name", value="cust1"),
+#         ui.input_select("itemselect", "Item", choices_names),
+#         ui.input_numeric("numitems", "Number", value=10),
+#         ui.output_text_verbatim("sel"),
+#         ui.p(ui.input_action_button("addItemToStop", "Add Item to Stop")),
+#         ui.p(ui.input_action_button("resetme", "Reset list")),
+#         ),
+#     ui.column(3,
+#         ui.panel_title("Pack List"),
+#         ui.output_table("packlist"),
+#         ),
+#     ui.column(3,
+#         ui.panel_title("Result"),
+#         ui.output_plot("plot"),
+#         ui.output_text_verbatim("outtxt"),
+#         )
+#     )
+# )
 app_ui = ui.page_fluid(
     ui.panel_title("Does it fit?"),
     ui.layout_sidebar(
@@ -56,12 +83,14 @@ app_ui = ui.page_fluid(
             ui.output_text_verbatim("sel"),
             ui.p(ui.input_action_button("addItemToStop", "Add Item to Stop")),
             ui.p(ui.input_action_button("resetme", "Reset list")),
-            ui.output_table("packlist"),
+            #ui.input_file("file1", "Upload Config File", multiple=False),
+            #ui.download_button("download", "Download Config File"),
         ),
         ui.panel_main(
             #ui.p(ui.input_action_button("calculate", "Recalculate Fit")),
             ui.output_plot("plot"),
             ui.output_text_verbatim("outtxt"),
+            ui.output_table("packlist"),
             #ui.output_text_verbatim("compute"),
         ),
     ),
@@ -126,7 +155,6 @@ def server(input, output, session):
     def outtxt():
         return reactive_output_text()
 
-    # TODO Make this work.
     @output
     @render.text
     @reactive.event(input.addItemToStop)
