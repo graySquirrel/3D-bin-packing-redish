@@ -111,8 +111,9 @@ def server(input, output, session):
     def packlist():
         df = pd.DataFrame(reactive_item_list(),
                 columns = ['Stop','item','Count','Customer','Name','Color'])
-        df = df.sort_values(by=['Stop'])
+        df = df.sort_values(by=['Stop','Count','Customer','Name'])
         df = df.assign(row=range(len(df)))
+        print(df)
         df = df.drop(columns=('item'))
         return df
     
@@ -125,11 +126,13 @@ def server(input, output, session):
         df = pd.DataFrame(reactive_item_list(),
                 columns = ['Stop','item','Count','Customer','Name','Color'])
         if therow < df.shape[0]:
-            df = df.sort_values(by=['Stop'])
+            df = df.sort_values(by=['Stop','Count','Customer','Name'])
             df = df.assign(row=range(len(df)))
-            df = df.drop([therow])
+            print("before drop", df)
+            df = df.drop(df.index[therow])
+            print("after drop", df)
             df = df.drop(columns=('row'))
-            reactive_item_list.set(df.values.tolist())
+        reactive_item_list.set(df.values.tolist())
 
     @reactive.Effect
     @reactive.event(input.addItemToStop)
