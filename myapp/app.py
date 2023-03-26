@@ -23,7 +23,6 @@ from shiny import App, reactive, render, ui
 from asyncio import sleep
 
 # TODO: Export Config, Import Config
-# TODO: remove item from packing list table
 # TODO: epose Truck selection?
 
 # Hardcode trucks for starters.
@@ -83,6 +82,8 @@ app_ui = ui.page_fluid(
             ui.output_text_verbatim("sel"),
             ui.p(ui.input_action_button("addItemToStop", "Add Item to Stop")),
             ui.p(ui.input_action_button("resetme", "Reset list")),
+            ui.input_numeric("removerownum", "Select Row", value=0, min=0, max=20),
+            ui.p(ui.input_action_button("removerow", "Remove Row")),
             #ui.input_file("file1", "Upload Config File", multiple=False),
             #ui.download_button("download", "Download Config File"),
         ),
@@ -109,11 +110,27 @@ def server(input, output, session):
     @render.table
     def packlist():
         df = pd.DataFrame(reactive_item_list(),
-                          columns = ['Stop','item','Count','Customer','Name','Color'])
-        df = df.drop(columns=('item'))
+                columns = ['Stop','item','Count','Customer','Name','Color'])
         df = df.sort_values(by=['Stop'])
+        df = df.assign(row=range(len(df)))
+        df = df.drop(columns=('item'))
         return df
     
+    @reactive.Effect
+    @reactive.event(input.removerow)
+    def remove_row():
+        therow = input.removerownum()
+        print("dropping row",therow)
+       # preprocess list to be same as packlist
+        df = pd.DataFrame(reactive_item_list(),
+                columns = ['Stop','item','Count','Customer','Name','Color'])
+        if therow < df.shape[0]:
+            df = df.sort_values(by=['Stop'])
+            df = df.assign(row=range(len(df)))
+            df = df.drop([therow])
+            df = df.drop(columns=('row'))
+            reactive_item_list.set(df.values.tolist())
+
     @reactive.Effect
     @reactive.event(input.addItemToStop)
     def add_Item_To_Stop():
