@@ -478,8 +478,9 @@ class Packer:
             
         r = [area[0][2],area[1][2],area[2][2],area[3][2]]
         result = []
-        for i in r :
-            result.append(round(i / sum(r) * 100,2))
+        if sum(r) > 0:
+            for i in r :
+                result.append(round(i / sum(r) * 100,2))
         return result
 
     def pack(self, bigger_first=False,distribute_items=False,fix_point=True,binding=[],number_of_decimals=DEFAULT_NUMBER_OF_DECIMALS):
@@ -595,6 +596,36 @@ class Painter:
         z_grid = z_grid + z
         ax.plot_surface(x_grid, y_grid, z_grid,shade=False,fc=color,ec='black',alpha=1,color=color)
         
+    def returnPlotAndItems(self,title=""):
+        """ side effective. Plot the Bin and the items it contains. """
+        fig = plt.figure()
+        axGlob = plt.axes(projection='3d')
+
+        counter = 0
+        # fit rotation type
+        for item in self.items:
+            rt = item.rotation_type  
+            x,y,z = item.position
+            [w,h,d] = item.getDimension()
+            color = item.color
+            if item.typeof == 'cube':
+                 # plot item of cube
+                self._plotCube(axGlob, float(x), float(y), float(z), float(w),float(h),float(d),color=color,mode=2)
+            elif item.typeof == 'cylinder':
+                # plot item of cylinder
+                self._plotCylinder(axGlob, float(x), float(y), float(z), float(w),float(h),float(d),color=color,mode=2)
+            
+            counter = counter + 1  
+        # plot bin 
+        self._plotCube(axGlob,0, 0, 0, float(self.width), float(self.height), float(self.depth),color='black',mode=1)
+
+        plt.title('result')
+        self.setAxesEqual(axGlob)
+        #fig, ax = plt.subplots()
+        #return fig
+        #ax = fig.add_subplot(111, projection='3d')
+        return axGlob
+
     def plotBoxAndItems(self,title=""):
         """ side effective. Plot the Bin and the items it contains. """
         fig = plt.figure()
