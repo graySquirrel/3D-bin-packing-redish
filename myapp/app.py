@@ -6,10 +6,10 @@ import numpy as np
 import itertools
 import sys
 import os 
-cwd = os.getcwd()
+#cwd = os.getcwd()
 #print("CWD",cwd)
 #print(sys.path)
-sys.path.append(cwd)
+#sys.path.append(cwd)
 #print(sys.path)
 from py3dbp import Packer, Bin, Item, Painter
 import time
@@ -91,7 +91,7 @@ app_ui = ui.page_fluid(
             ui.output_plot("plot"),
             ui.output_text_verbatim("outtxt"),
             ui.output_table("packlist"),
-            #ui.output_text_verbatim("compute"),
+            ui.output_text_verbatim("compute"),
         ),
     ),
 )
@@ -166,6 +166,6 @@ def server(input, output, session):
                 p.set(i, message="Computing")
                 await sleep(0.1)
 
-        return "Done computing!"
+        return ""
     
 app = App(app_ui, server)
