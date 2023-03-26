@@ -62,7 +62,7 @@ def packAndPrintResults(p):
     unfittedItems = {}
     if (len(box.unfitted_items) > 0):
         notfitnum=len(box.unfitted_items)
-        tmpstr = str(notfitnum) + " Items dont fit:"
+        tmpstr = str(notfitnum) + " Items dont fit:\n"
         print(tmpstr)
         theReturnString += tmpstr
         for item in box.unfitted_items:
@@ -80,19 +80,19 @@ def packAndPrintResults(p):
             # print("***************************************************")
     #print("***************************************************")
         for key in unfittedItems:
-            tmpstr = str(key) + " " + str(unfittedItems[key]) + "\n"
+            tmpstr = str(key) + ": " + str(unfittedItems[key]) + "\n"
             print(tmpstr)
             theReturnString += tmpstr
     else:
-        tmpstr = "all totes fit!!"
+        tmpstr = "all totes fit!!\n"
         print(tmpstr)
         theReturnString += tmpstr
     tmpstr = "space utilization : %s" % format(round(volume_t / float(volume) * 100, 2))
     print(tmpstr)
-    theReturnString += tmpstr
+    #theReturnString += tmpstr
     tmpstr = f'residual volume : %f' % (float(volume) - volume_t)
     print(tmpstr)
-    theReturnString += tmpstr
+    #theReturnString += tmpstr
     #print('unpack item : ', unfitted_name)
 
     #print('unpack item volume : ', volume_f)
@@ -101,5 +101,5 @@ def packAndPrintResults(p):
     stop = time.time()
     #print('used time : ', stop - start)
     print("***************************************************")
-    theReturnString += "*********"
+    #theReturnString += "*********"
     return(Painter(box), theReturnString)
