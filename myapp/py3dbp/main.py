@@ -132,56 +132,66 @@ class Bin:
         valid_item_position = item.position
         item.position = pivot
         rotate = RotationType.ALL if item.updown == True else RotationType.Notupdown
-        for i in range(0, len(rotate)):
-            item.rotation_type = i
-            dimension = item.getDimension()
-            # rotatate
-            if (
-                self.width < pivot[0] + dimension[0] or
-                self.height < pivot[1] + dimension[1] or
-                self.depth < pivot[2] + dimension[2]
-            ):
-                continue
 
-            fit = True
+        # Get the width pivot point of the bin
+        bin_width_pivot = [0, pivot[1], pivot[2]] #NEW
 
-            for current_item_in_bin in self.items:
-                if intersect(current_item_in_bin, item):
-                    fit = False
-                    break
+        #for current_pivot in [pivot, bin_width_pivot]: #NEW
+        for current_pivot in [pivot]: #NEW
+            for i in range(0, len(rotate)):
+                item.rotation_type = i
+                dimension = item.getDimension()
+                # rotatate
+                if (
+                    # self.width < pivot[0] + dimension[0] or
+                    # self.height < pivot[1] + dimension[1] or
+                    # self.depth < pivot[2] + dimension[2]
+                    self.width < current_pivot[0] + dimension[0] or
+                    self.height < current_pivot[1] + dimension[1] or
+                    self.depth < current_pivot[2] + dimension[2]
+                ):
+                    continue
 
-            if fit:
-                # cal total weight
-                if self.getTotalWeight() + item.weight > self.max_weight:
-                    fit = False
-                    return fit
+                fit = True
 
-                if item.partno == 'Dyson DC34 Animal8':
-                    print(123)
-                    # self.fix_point = False
+                for current_item_in_bin in self.items:
+                    if intersect(current_item_in_bin, item):
+                        fit = False
+                        break
 
-                if self.fix_point == True :
+                if fit:
+                    # cal total weight
+                    if self.getTotalWeight() + item.weight > self.max_weight:
+                        fit = False
+                        return fit
+
+                    if item.partno == 'Dyson DC34 Animal8':
+                        print(123)
+                        # self.fix_point = False
+
+                    if self.fix_point == True :
+                            
+                        [w,h,d] = dimension
+                        #[x,y,z] = [float(pivot[0]),float(pivot[1]),float(pivot[2])]
+                        [x,y,z] = [float(current_pivot[0]),float(current_pivot[1]),float(current_pivot[2])]
+
+                        for i in range(3):
+                            # fix height
+                            y = self.checkHeight([x,x+float(w),y,y+float(h),z,z+float(d)])
+                            # fix width
+                            x = self.checkWidth([x,x+float(w),y,y+float(h),z,z+float(d)])
+                            # fix depth
+                            z = self.checkDepth([x,x+float(w),y,y+float(h),z,z+float(d)])
+
+                        self.fit_items = np.append(self.fit_items,np.array([[x,x+float(w),y,y+float(h),z,z+float(d)]]),axis=0)
+                        item.position = [set2Decimal(x),set2Decimal(y),set2Decimal(z)]
                         
-                    [w,h,d] = dimension
-                    [x,y,z] = [float(pivot[0]),float(pivot[1]),float(pivot[2])]
+                    self.items.append(item)
 
-                    for i in range(3):
-                        # fix height
-                        y = self.checkHeight([x,x+float(w),y,y+float(h),z,z+float(d)])
-                        # fix width
-                        x = self.checkWidth([x,x+float(w),y,y+float(h),z,z+float(d)])
-                        # fix depth
-                        z = self.checkDepth([x,x+float(w),y,y+float(h),z,z+float(d)])
+                if not fit:
+                    item.position = valid_item_position
 
-                    self.fit_items = np.append(self.fit_items,np.array([[x,x+float(w),y,y+float(h),z,z+float(d)]]),axis=0)
-                    item.position = [set2Decimal(x),set2Decimal(y),set2Decimal(z)]
-                    
-                self.items.append(item)
-
-            if not fit:
-                item.position = valid_item_position
-
-            return fit
+                return fit
 
         if not fit:
             item.position = valid_item_position
@@ -343,12 +353,33 @@ class Packer:
                     pivot = [ib.position[0],ib.position[1] + h,ib.position[2]]
                 elif axis == Axis.DEPTH:
                     pivot = [ib.position[0],ib.position[1],ib.position[2] + d]
-                    
+                
                 if bin.putItem(item, pivot, axis):
                     fitted = True
                     break
             if fitted:
                 break
+
+##### only try this if the per-item pivot approach fails
+        if not fitted:
+            for axis in range(0, 3):
+                items_in_bin = bin.items
+                for ib in items_in_bin:
+                    pivot = [0, 0, 0]
+                    w, h, d = ib.getDimension()
+                    if axis == Axis.WIDTH:
+                        pivot = [ib.position[0] + w,0,0]
+                    elif axis == Axis.HEIGHT:
+                        pivot = [0,ib.position[1] + h,0]
+                    elif axis == Axis.DEPTH:
+                        pivot = [0,0,ib.position[2] + d]
+                    
+                    if bin.putItem(item, pivot, axis):
+                        fitted = True
+                        break
+                if fitted:
+                    break
+
         if not fitted:
             bin.unfitted_items.append(item)
 
