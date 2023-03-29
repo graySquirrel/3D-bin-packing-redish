@@ -25,7 +25,7 @@ from asyncio import sleep
 # TODO: Export Config, Import Config
 # TODO: epose Truck selection?
 
-# Hardcode trucks for starters.
+# Hardcode trucks for starters. W, D, H
 TwentyFootTruckHalf = [(41, 202, 60), 'TwentyFootTruckHalf']
 TwentyFootTowerTruckHalf = [(41, 202, 71), 'TwentyFootTruckHalf']
 TwentyFootTruck = [(82, 202, 71), 'TwentyFootTruck']
