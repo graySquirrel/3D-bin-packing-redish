@@ -27,8 +27,8 @@ from asyncio import sleep
 
 # Hardcode trucks for starters. W, D, H
 TwentyFootTruckHalf = [(41, 202, 60), 'TwentyFootTruckHalf']
-TwentyFootTowerTruckHalf = [(41, 202, 71), 'TwentyFootTruckHalf']
-TwentyFootTruck = [(82, 202, 71), 'TwentyFootTruck']
+TwentyFootTowerTruckHalf = [(41, 202, 60), 'TwentyFootTruckHalf']
+TwentyFootTruck = [(82, 202, 60), 'TwentyFootTruck']
 
 dfItemDefn = pd.read_csv(Path(__file__).parent / "itemDefinitions.csv")
 dfItemDefnList = dfItemDefn.values.tolist()
@@ -154,7 +154,7 @@ def server(input, output, session):
         # initialize the session
         packer = Packer()
         # add the truck
-        re.addTruck(packer, TwentyFootTruckHalf)
+        re.addTruck(packer, TwentyFootTruck)
         # loop through items list and add each
         df = pd.DataFrame(reactive_item_list(),
                           columns = ['Stop','item','Count','Customer','Name','Color'])

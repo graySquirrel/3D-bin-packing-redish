@@ -30,11 +30,11 @@ choices_names = list(map(lambda x: (x[1]), choices))
 # Bin dims go W, D, H
 TwentyFootTruckHalf = [(41, 202, 60), 'TwentyFootTruckHalf']
 TwentyFootTowerTruckHalf = [(41, 202, 71), 'TwentyFootTruckHalf']
-TwentyFootTruck = [(82, 202, 71), 'TwentyFootTruck']
+TwentyFootTruck = [(82, 202, 60), 'TwentyFootTruck']
 # init packing function
 packer = Packer()
 
-re.addTruck(packer, TwentyFootTruckHalf)
+re.addTruck(packer, TwentyFootTruck)
 #re.addTruck(packer, TwentyFootTruck)
 # stop,item,count,customer
 # 1,1,5,MOMA
