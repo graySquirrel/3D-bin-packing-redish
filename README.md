@@ -1,5 +1,10 @@
 3D Bin Packing
 ====
+updated to make a python shiny app that users can access on the interwebs.
+
+NB. if you want to run redish.py, do symlink to files after cloning repo
+ln -s myapp/redishUtils.py
+ln -s myapp/py3dbp
 
 3D Bin Packing improvements based on [this repository](https://github.com/enzoruiz/3dbinpacking). 
 
